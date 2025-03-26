@@ -1,7 +1,11 @@
 // 网页文件/app.js
 
-// 修改API地址（替换YOUR_RENDER_APP_NAME为你的Render应用名）
-const API_URL = 'https://welding-dictionary.onrender.com/api/search';
+if (typeof API_URL === 'undefined') {
+    const API_URL = 'https://welding-dictionary.onrender.com/api/search';
+}
+
+// // 修改API地址（替换YOUR_RENDER_APP_NAME为你的Render应用名）
+// const API_URL = 'https://welding-dictionary.onrender.com/api/search';
 
 // 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
