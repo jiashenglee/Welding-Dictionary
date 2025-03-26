@@ -3,6 +3,14 @@
 // 修改API地址（替换YOUR_RENDER_APP_NAME为你的Render应用名）
 const API_URL = 'https://your-render-app.onrender.com/api/search';
 
+// 页面加载完成后初始化
+document.addEventListener('DOMContentLoaded', () => {
+    // 绑定搜索按钮事件
+    document.getElementById('searchButton').addEventListener('click', performSearch);
+    
+    // 其他初始化代码...
+});
+
 async function performSearch() {
     const searchInput = document.getElementById('searchInput');
     const fuzzyCheckbox = document.getElementById('fuzzySearch');
