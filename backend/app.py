@@ -69,4 +69,5 @@ def handle_search():
     return jsonify({"results": results})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)  # Render需要指定端口
+    port = int(os.environ.get("PORT", 10000))  # 优先使用Render分配的端口
+    app.run(host='0.0.0.0', port=port)  # 必须设置host为0.0.0.0
