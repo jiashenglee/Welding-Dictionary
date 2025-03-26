@@ -7,8 +7,18 @@ from flask_cors import CORS  # 新增：解决跨域问题
 app = Flask(__name__)
 CORS(app)  # 新增：允许所有域名访问
 
-# 修改数据路径（自动适应Render环境）
-DATA_DIR = Path(__file__).parent / "data"
+# # 修改数据路径（自动适应Render环境）
+# DATA_DIR = Path(__file__).parent / "data"
+
+# 修改为绝对路径（Render专用）
+import os
+DATA_DIR = Path(os.path.dirname(__file__)) / "data"  # 使用os模块确保路径正确
+
+# 添加路径验证
+if not DATA_DIR.exists():
+    raise Exception(f"数据目录不存在：{DATA_DIR}")
+
+
 
 def search_files(keywords, fuzzy=False):
     results = []
