@@ -1,8 +1,6 @@
 // 网页文件/app.js
 
-if (typeof API_URL === 'undefined') {
-    const API_URL = 'https://welding-dictionary.onrender.com/api/search';
-}
+const API_URL = 'https://welding-dictionary.onrender.com/api/search';
 
 // // 修改API地址（替换YOUR_RENDER_APP_NAME为你的Render应用名）
 // const API_URL = 'https://welding-dictionary.onrender.com/api/search';
@@ -30,7 +28,7 @@ async function performSearch() {
     }
 
     try {
-        const response = await fetch('/api/search', {
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
