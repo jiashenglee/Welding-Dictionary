@@ -57,18 +57,19 @@ def search_files(keywords, fuzzy=False):
     return results
 
 # @app.route('/api/search', methods=['POST'])
-@app.route('/api/search', methods=['GET', 'POST'])  # 添加GET方法
 
+
+@app.route('/api/search', methods=['GET', 'POST'])  # 允许两种方法
 def handle_search():
-    # 从GET参数获取数据
-    keywords = request.args.get('keywords', '').split(',')
-    fuzzy = request.args.get('fuzzy', 'false').lower() == 'true'
-    
-# def handle_search():
-#     data = request.json
-#     keywords = data.get('keywords', [])
-#     fuzzy = data.get('fuzzy', False)
-    
+    # 根据请求方法获取参数
+    if request.method == 'POST':
+        data = request.get_json()
+        keywords = data.get('keywords', [])
+        fuzzy = data.get('fuzzy', False)
+    else:  # GET方法
+        keywords = request.args.get('keywords', '').split(',')
+        fuzzy = request.args.get('fuzzy', 'false').lower() == 'true'
+     
     if not keywords:
         return jsonify({"error": "请输入搜索关键词"}), 400
     
