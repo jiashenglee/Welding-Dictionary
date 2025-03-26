@@ -37,6 +37,15 @@ async function performSearch() {
             })
         });
 
+
+        // 新增：检查响应内容类型
+        const contentType = response.headers.get('content-type');
+        if (!contentType.includes('application/json')) {
+            const text = await response.text();
+            throw new Error(`响应不是JSON格式: ${text.slice(0, 100)}...`);
+        }
+        //
+        
         const data = await response.json();
         
         if (data.error) {
