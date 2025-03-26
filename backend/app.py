@@ -5,6 +5,7 @@ from pathlib import Path
 from flask_cors import CORS  # 新增：解决跨域问题
 
 app = Flask(__name__)
+app.config['JSON_AS_ASCII'] = False  # 新增这行禁用ASCII编码
 CORS(app)  # 新增：允许所有域名访问
 
 # # 修改数据路径（自动适应Render环境）
@@ -119,7 +120,7 @@ def handle_search():
     results = search_files(keywords, fuzzy)
     print(f"找到 {len(results)} 条结果")
     
-    return jsonify({"results": results})
+    return jsonify({"results": results}), 200, {'Content-Type': 'application/json; charset=utf-8'}
 
 
 
