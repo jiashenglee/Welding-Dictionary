@@ -1,18 +1,8 @@
-// 网页文件/app.js
+// 全局常量定义（必须放在最顶部）
+const API_URL = 'https://welding-dictionary.onrender.com/api/search';
 
-if (typeof API_URL === 'undefined') {
-    const API_URL = 'https://welding-dictionary.onrender.com/api/search';
-}
-
-// // 修改API地址（替换YOUR_RENDER_APP_NAME为你的Render应用名）
-// const API_URL = 'https://welding-dictionary.onrender.com/api/search';
-
-// 页面加载完成后初始化
 document.addEventListener('DOMContentLoaded', () => {
-    // 绑定搜索按钮事件
     document.getElementById('searchButton').addEventListener('click', performSearch);
-    
-    // 其他初始化代码...
 });
 
 async function performSearch() {
@@ -30,39 +20,45 @@ async function performSearch() {
     }
 
     try {
-        const response = await fetch('/api/search', {
+        // 关键修改：使用API_URL常量
+        const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                keywords: keywords.split(',').map(k => k.trim()),
+                keywords: keywords.split(/[,，]/), // 支持中英文逗号
                 fuzzy: fuzzy
             })
         });
-     
-        const data = await response.json();
-        
-        if (data.error) {
-            alert(data.error);
-            return;
+
+        // 增强响应处理
+        if (!response.ok) {
+            const errorData = await response.json().catch(() => ({}));
+            throw new Error(errorData.message || `HTTP错误: ${response.status}`);
         }
 
+        const data = await response.json();
+        
         resultsBody.innerHTML = '';
-        data.results.forEach((item, index) => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
-                <td>${index + 1}</td>
-                <td>${item.term}</td>
-                <td>${item.explanation}</td>
-            `;
-            resultsBody.appendChild(row);
-        });
+        if (data.results.length === 0) {
+            resultsBody.innerHTML = '<tr><td colspan="3">未找到匹配结果</td></tr>';
+        } else {
+            data.results.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${index + 1}</td>
+                    <td>${item.term}</td>
+                    <td>${item.explanation}</td>
+                `;
+                resultsBody.appendChild(row);
+            });
+        }
 
         resultStats.textContent = `找到 ${data.results.length} 条结果`;
         
     } catch (error) {
-        console.error('搜索出错:', error);
-        alert('搜索服务暂时不可用');
+        console.error('完整错误:', error);
+        resultsBody.innerHTML = `<tr><td colspan="3" style="color:red">错误: ${error.message}</td></tr>`;
     }
 }
