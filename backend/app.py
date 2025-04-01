@@ -81,6 +81,10 @@ from flask import send_from_directory  # 新增导入
 
 @app.route('/images/<filename>')  # 新增路由
 def serve_image(filename):
+    # 处理中文文件名
+    filename = filename.encode('utf-8').decode('latin-1')
+    # 统一转换为小写扩展名
+    filename = re.sub(r'\.(png|jpg|jpeg)$', lambda m: m.group().lower(), filename)
     return send_from_directory(DATA_DIR / 'pic', filename)
 
 @app.route('/api/search', methods=['GET', 'POST'])
