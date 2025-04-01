@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 from flask_cors import CORS  # 新增：解决跨域问题
 import re  # 新增：正则表达式支持
+from urllib.parse import unquote  # 新增导入
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False  # 新增这行禁用ASCII编码
@@ -91,8 +92,9 @@ from flask import send_from_directory  # 新增导入
 @app.route('/images/<filename>')
 def serve_image(filename):
     try:
-        # 移除所有文件名处理逻辑，直接使用原始参数
-        return send_from_directory(DATA_DIR / 'pic', filename)
+        # 处理 URL 编码的中文字符
+        decoded_filename = unquote(filename)
+        return send_from_directory(DATA_DIR / 'pic', decoded_filename)
     except Exception as e:
         print(f"图片加载失败: {str(e)}")
         return "Not Found", 404
