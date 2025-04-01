@@ -54,7 +54,7 @@ async function performSearch() {
                 <td>${item.term}</td>
                 <td>${item.explanation}</td>
                 <td>${item.image ? 
-                         `<img src="/images/${item.image}.png" 
+                         `<img src="https://welding-dictionary.onrender.com/images/${item.image}.png"` 
                                     style="max-height: 60px; max-width: 100px;" 
                                     onerror="this.style.display='none'">` : 
                           ' '}
