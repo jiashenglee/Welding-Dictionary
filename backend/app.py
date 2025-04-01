@@ -91,10 +91,7 @@ from flask import send_from_directory  # 新增导入
 @app.route('/images/<filename>')
 def serve_image(filename):
     try:
-        # 处理中文文件名（兼容 Render 的文件系统编码）
-        filename = filename.encode('utf-8').decode('latin-1')
-        # 统一扩展名（不强制修改文件名）
-        filename = re.sub(r'\.(png|jpg|jpeg)$', '', filename, flags=re.IGNORECASE) + '.png'
+        # 移除所有文件名处理逻辑，直接使用原始参数
         return send_from_directory(DATA_DIR / 'pic', filename)
     except Exception as e:
         print(f"图片加载失败: {str(e)}")
