@@ -53,11 +53,21 @@ async function performSearch() {
                 <td>${index + 1}</td>
                 <td>${item.term}</td>
                 <td>${item.explanation}</td>
-                <td>${item.image ? 
-                             `<img src="https://welding-dictionary.onrender.com/images/${item.image}"
-                                        style="max-height: 60px; max-width: 100px;" 
-                                        onerror="this.style.display='none'">` : 
-                          ' '}
+                <td>
+                    ${item.image ? 
+                        // 图片和详情链接容器
+                        `<div class="image-container">
+                            <img src="https://welding-dictionary.onrender.com/images/${item.image}"
+                                 style="max-height: 60px; max-width: 100px;" 
+                                 onerror="this.style.display='none'">
+                            <!-- 新增详情链接 -->
+                            <a href="https://welding-dictionary.onrender.com/images/${item.image}" 
+                               target="_blank" 
+                               class="detail-link">
+                                详情
+                            </a>
+                        </div>` : 
+                        ' '}
             `;
             resultsBody.appendChild(row);
         });
