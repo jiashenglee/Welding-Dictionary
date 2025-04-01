@@ -88,13 +88,17 @@ def search_files(keywords, fuzzy=False):
 # 在文件末尾新增图片路由
 from flask import send_from_directory  # 新增导入
 
-@app.route('/images/<filename>')  # 新增路由
+@app.route('/images/<filename>')
 def serve_image(filename):
-    # 处理中文文件名
-    filename = filename.encode('utf-8').decode('latin-1')
-    # 统一转换为小写扩展名
-    filename = re.sub(r'\.(png|jpg|jpeg)$', lambda m: m.group().lower(), filename)
-    return send_from_directory(DATA_DIR / 'pic', filename)
+    try:
+        # 处理中文文件名（兼容 Render 的文件系统编码）
+        filename = filename.encode('utf-8').decode('latin-1')
+        # 统一扩展名（不强制修改文件名）
+        filename = re.sub(r'\.(png|jpg|jpeg)$', '', filename, flags=re.IGNORECASE) + '.png'
+        return send_from_directory(DATA_DIR / 'pic', filename)
+    except Exception as e:
+        print(f"图片加载失败: {str(e)}")
+        return "Not Found", 404
 
 @app.route('/api/search', methods=['GET', 'POST'])
 def handle_search():
