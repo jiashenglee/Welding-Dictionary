@@ -68,6 +68,7 @@ async function performSearch() {
                             </a>
                         </div>` : 
                         ' '}
+                 </td>
             `;
             resultsBody.appendChild(row);
         });
