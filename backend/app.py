@@ -7,7 +7,16 @@ import re  # 新增：正则表达式支持
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False  # 新增这行禁用ASCII编码
-CORS(app)  # 新增：允许所有域名访问
+# CORS(app)  # 新增：允许所有域名访问
+# 修改后（精确配置）
+CORS(app, resources={
+    r"/api/*": {"origins": "*"},
+    r"/images/*": {
+        "origins": ["https://jiashenglee.github.io"],
+        "methods": ["GET"],
+        "max_age": 3600
+    }
+})
 
 # # 修改数据路径（自动适应Render环境）
 # DATA_DIR = Path(__file__).parent / "data"
